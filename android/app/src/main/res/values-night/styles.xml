@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lumo background — LumoColors.darkBackground -->
+    <color name="lumo_background">#111110</color>
+
+    <!-- Theme applied to the Android Window while the process is starting (dark mode) -->
+    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
+    </style>
+
+    <!-- Theme applied once Flutter engine is running -->
+    <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="android:windowBackground">@color/lumo_background</item>
+    </style>
+</resources>

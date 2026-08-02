@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Lumo native splash — matches LumoColors.lightBackground (#F9F9F7) -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/lumo_background" />
+</layer-list>
