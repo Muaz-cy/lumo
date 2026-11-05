@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../features/cart/providers/cart_providers.dart';
+import 'package:lumo/l10n/app_localizations.dart';
 import '../design_system/design_system.dart';
 
 /// Lumo Shell Scaffold
@@ -14,9 +14,6 @@ class LumoShell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cartCount = ref.watch(
-      cartNotifierProvider.select((c) => c.itemCount),
-    );
     final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -24,7 +21,6 @@ class LumoShell extends ConsumerWidget {
       body: navigationShell,
       bottomNavigationBar: _LumoNavBar(
         currentIndex: navigationShell.currentIndex,
-        cartCount: cartCount,
         onTap: (index) => navigationShell.goBranch(
           index,
           initialLocation: index == navigationShell.currentIndex,
@@ -41,17 +37,16 @@ class LumoShell extends ConsumerWidget {
 class _LumoNavBar extends StatelessWidget {
   const _LumoNavBar({
     required this.currentIndex,
-    required this.cartCount,
     required this.onTap,
   });
 
   final int currentIndex;
-  final int cartCount;
   final ValueChanged<int> onTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -67,36 +62,35 @@ class _LumoNavBar extends StatelessWidget {
               _NavItem(
                 icon: Icons.home_outlined,
                 activeIcon: Icons.home_rounded,
-                label: 'Home',
+                label: l10n.navHome,
                 isActive: currentIndex == 0,
                 onTap: () => onTap(0),
               ),
               _NavItem(
                 icon: Icons.search_rounded,
                 activeIcon: Icons.search_rounded,
-                label: 'Search',
+                label: l10n.navSearch,
                 isActive: currentIndex == 1,
                 onTap: () => onTap(1),
               ),
               _NavItem(
-                icon: Icons.favorite_border_rounded,
-                activeIcon: Icons.favorite_rounded,
-                label: 'Saved',
+                icon: Icons.map_outlined,
+                activeIcon: Icons.map_rounded,
+                label: 'Map',
                 isActive: currentIndex == 2,
                 onTap: () => onTap(2),
               ),
-              _NavItemWithBadge(
-                icon: Icons.shopping_bag_outlined,
-                activeIcon: Icons.shopping_bag_rounded,
-                label: 'Cart',
+              _NavItem(
+                icon: Icons.bookmark_border_rounded,
+                activeIcon: Icons.bookmark_rounded,
+                label: l10n.navSaved,
                 isActive: currentIndex == 3,
-                badgeCount: cartCount,
                 onTap: () => onTap(3),
               ),
               _NavItem(
                 icon: Icons.person_outline_rounded,
                 activeIcon: Icons.person_rounded,
-                label: 'Profile',
+                label: l10n.navProfile,
                 isActive: currentIndex == 4,
                 onTap: () => onTap(4),
               ),
@@ -171,101 +165,3 @@ class _NavItem extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-// Nav item with badge — cart
-// ─────────────────────────────────────────────
-
-class _NavItemWithBadge extends StatelessWidget {
-  const _NavItemWithBadge({
-    required this.icon,
-    required this.activeIcon,
-    required this.label,
-    required this.isActive,
-    required this.badgeCount,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final IconData activeIcon;
-  final String label;
-  final bool isActive;
-  final int badgeCount;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        behavior: HitTestBehavior.opaque,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                AnimatedSwitcher(
-                  duration: LumoMotion.fast,
-                  switchInCurve: LumoMotion.snap,
-                  switchOutCurve: LumoMotion.exit,
-                  transitionBuilder: (child, anim) =>
-                      ScaleTransition(scale: anim, child: child),
-                  child: Icon(
-                    isActive ? activeIcon : icon,
-                    key: ValueKey(isActive),
-                    size: 22,
-                    color: isActive
-                        ? colors.onSurface
-                        : colors.onSurface.withValues(alpha: 0.35),
-                  ),
-                ),
-                if (badgeCount > 0)
-                  Positioned(
-                    top: -5,
-                    right: -8,
-                    child: AnimatedScale(
-                      scale: badgeCount > 0 ? 1.0 : 0.0,
-                      duration: LumoMotion.fast,
-                      curve: LumoMotion.snap,
-                      child: Container(
-                        constraints: const BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16,
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          color: colors.primary,
-                          borderRadius: LumoRadius.borderPill,
-                        ),
-                        child: Text(
-                          badgeCount > 99 ? '99+' : '$badgeCount',
-                          style: LumoTypography.labelSmall.copyWith(
-                            color: colors.onPrimary,
-                            fontSize: 9,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 3),
-            AnimatedDefaultTextStyle(
-              duration: LumoMotion.fast,
-              style: LumoTypography.labelSmall.copyWith(
-                color: isActive
-                    ? colors.onSurface
-                    : colors.onSurface.withValues(alpha: 0.35),
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-              ),
-              child: Text(label),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

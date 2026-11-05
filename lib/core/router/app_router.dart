@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -6,25 +7,24 @@ import '../../features/authentication/presentation/onboarding_screen.dart';
 import '../../features/authentication/presentation/login_screen.dart';
 import '../../features/authentication/presentation/register_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
-import '../../features/product/presentation/product_detail_screen.dart';
-import '../../features/cart/presentation/cart_screen.dart';
+import '../../features/property/presentation/property_detail_screen.dart';
+import '../../features/map/presentation/map_screen.dart';
 import '../../features/wishlist/presentation/wishlist_screen.dart';
-import '../../features/checkout/presentation/checkout_screen.dart';
-import '../../features/orders/presentation/order_confirmation_screen.dart';
-import '../../features/orders/presentation/orders_screen.dart';
-import '../../features/orders/presentation/order_detail_screen.dart';
 import '../../features/search/presentation/search_screen.dart';
-import '../../features/categories/presentation/categories_screen.dart';
-import '../../features/discovery/presentation/discovery_screen.dart';
+import '../../features/broker/presentation/broker_dashboard_screen.dart';
+import '../../features/broker/presentation/broker_listings_screen.dart';
+import '../../features/broker/presentation/broker_shell.dart';
+import '../../features/broker/presentation/submit_listing_screen.dart';
+import '../../features/inquiry/presentation/inquiries_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
-import '../../features/reviews/presentation/reviews_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
+import '../../features/consultation/presentation/consultation_screen.dart';
+import '../../features/property/presentation/comparison_screen.dart';
 import '../../shared/widgets/lumo_shell.dart';
 
 part 'app_router.g.dart';
 
-/// Route name constants — never use raw strings for navigation.
 abstract final class LumoRoutes {
   // Auth
   static const splash = '/';
@@ -35,30 +35,31 @@ abstract final class LumoRoutes {
   // Shell tabs
   static const home = '/home';
   static const search = '/search';
+  static const map = '/map';
   static const wishlist = '/wishlist';
-  static const cart = '/cart';
   static const profile = '/profile';
 
-  // Product
-  static const productDetail = '/product/:id';
-
-  // Checkout funnel
-  static const checkout = '/checkout';
-  static const orderConfirmation = '/order-confirmation/:id';
-  static const orders = '/orders';
-  static const orderDetail = '/orders/:id';
-
-  // Discovery
-  static const discovery = '/discovery';
-  static const categories = '/categories';
-  static const categoryDetail = '/categories/:id';
-
-  // Reviews
-  static const reviews = '/reviews/:productId';
+  // Property
+  static const propertyDetail = '/property/:id';
 
   // Account
+  static const inquiries = '/inquiries';
   static const settings = '/settings';
   static const notifications = '/notifications';
+  static const consultation = '/consultation';
+
+  // Map (standalone — used for property-specific navigation)
+  static const mapDetail = '/map/property/:id';
+
+  // Comparison
+  static const comparison = '/compare';
+
+  // Broker
+  static const brokerDashboard = '/broker/dashboard';
+  static const brokerListings = '/broker/listings';
+  static const brokerSubmit = '/broker/submit';
+  static const brokerProfile = '/broker/profile';
+  static const brokerApply = '/broker/apply';
 }
 
 @riverpod
@@ -67,7 +68,7 @@ GoRouter appRouter(Ref ref) {
     initialLocation: LumoRoutes.splash,
     debugLogDiagnostics: true,
     routes: [
-      // ── Auth (no shell) ──────────────────────────────
+      // ── Auth ─────────────────────────────────────────
       GoRoute(
         path: LumoRoutes.splash,
         builder: (context, state) => const SplashScreen(),
@@ -85,53 +86,19 @@ GoRouter appRouter(Ref ref) {
         builder: (context, state) => const RegisterScreen(),
       ),
 
-      // ── Product detail (no shell — full screen) ──────
+      // ── Property detail ──────────────────────────────
       GoRoute(
-        path: LumoRoutes.productDetail,
-        builder: (context, state) => ProductDetailScreen(
-          productId: state.pathParameters['id']!,
-        ),
-      ),
-
-      // ── Checkout funnel (no shell) ───────────────────
-      GoRoute(
-        path: LumoRoutes.checkout,
-        builder: (context, state) => const CheckoutScreen(),
-      ),
-      GoRoute(
-        path: LumoRoutes.orderConfirmation,
-        builder: (context, state) => OrderConfirmationScreen(
-          orderId: state.pathParameters['id']!,
-        ),
-      ),
-      GoRoute(
-        path: LumoRoutes.orders,
-        builder: (context, state) => const OrdersScreen(),
-      ),
-      GoRoute(
-        path: LumoRoutes.orderDetail,
-        builder: (context, state) => OrderDetailScreen(
-          orderId: state.pathParameters['id']!,
-        ),
-      ),
-
-      // ── Discovery (no shell — full screen) ───────────
-      GoRoute(
-        path: LumoRoutes.discovery,
-        builder: (context, state) => const DiscoveryScreen(),
-      ),
-      GoRoute(
-        path: LumoRoutes.categories,
-        builder: (context, state) => const CategoriesScreen(),
-      ),
-      GoRoute(
-        path: LumoRoutes.categoryDetail,
-        builder: (context, state) => CategoryDetailScreen(
-          categoryId: state.pathParameters['id']!,
+        path: LumoRoutes.propertyDetail,
+        builder: (context, state) => PropertyDetailScreen(
+          propertyId: state.pathParameters['id']!,
         ),
       ),
 
       // ── Account (no shell) ───────────────────────────
+      GoRoute(
+        path: LumoRoutes.inquiries,
+        builder: (context, state) => const InquiriesScreen(),
+      ),
       GoRoute(
         path: LumoRoutes.settings,
         builder: (context, state) => const SettingsScreen(),
@@ -141,65 +108,106 @@ GoRouter appRouter(Ref ref) {
         builder: (context, state) => const NotificationsScreen(),
       ),
       GoRoute(
-        path: LumoRoutes.reviews,
-        builder: (context, state) => ReviewsScreen(
-          productId: state.pathParameters['productId']!,
+        path: LumoRoutes.consultation,
+        builder: (context, state) => const ConsultationScreen(),
+      ),
+
+      // ── Map detail (property-focused, no shell) ───────
+      GoRoute(
+        path: LumoRoutes.mapDetail,
+        builder: (context, state) => MapScreen(
+          focusPropertyId: state.pathParameters['id'],
         ),
       ),
 
-      // ── Main shell — persistent bottom nav ───────────
+      // ── Comparison ───────────────────────────────────
+      GoRoute(
+        path: LumoRoutes.comparison,
+        builder: (context, state) => const ComparisonScreen(),
+      ),
+
+      // ── Broker apply (placeholder) ───────────────────
+      GoRoute(
+        path: LumoRoutes.brokerApply,
+        builder: (context, state) => const Scaffold(
+          body: Center(child: Text('Broker application — coming soon')),
+        ),
+      ),
+
+      // ── Broker shell ─────────────────────────────────
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            BrokerShell(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: LumoRoutes.brokerDashboard,
+              builder: (context, state) => const BrokerDashboardScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: LumoRoutes.brokerListings,
+              builder: (context, state) => const BrokerListingsScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: LumoRoutes.brokerSubmit,
+              builder: (context, state) => const SubmitListingScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: LumoRoutes.brokerProfile,
+              builder: (context, state) => const ProfileScreen(),
+            ),
+          ]),
+        ],
+      ),
+
+      // ── Main shell ───────────────────────────────────
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             LumoShell(navigationShell: navigationShell),
         branches: [
-          // 0 — Home
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: LumoRoutes.home,
-                builder: (context, state) => const HomeScreen(),
-              ),
-            ],
-          ),
-          // 1 — Search
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: LumoRoutes.search,
-                builder: (context, state) => const SearchScreen(),
-              ),
-            ],
-          ),
-          // 2 — Wishlist
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: LumoRoutes.wishlist,
-                builder: (context, state) => const WishlistScreen(),
-              ),
-            ],
-          ),
-          // 3 — Cart
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: LumoRoutes.cart,
-                builder: (context, state) => const CartScreen(),
-              ),
-            ],
-          ),
-          // 4 — Profile
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: LumoRoutes.profile,
-                builder: (context, state) => const ProfileScreen(),
-              ),
-            ],
-          ),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: LumoRoutes.home,
+              builder: (context, state) => const HomeScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: LumoRoutes.search,
+              builder: (context, state) {
+                final extra = state.extra as Map<String, dynamic>?;
+                return SearchScreen(
+                  initialNeighborhood: extra?['neighborhood'] as String?,
+                );
+              },
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: LumoRoutes.map,
+              builder: (context, state) => const MapScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: LumoRoutes.wishlist,
+              builder: (context, state) => const WishlistScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: LumoRoutes.profile,
+              builder: (context, state) => const ProfileScreen(),
+            ),
+          ]),
         ],
       ),
     ],
   );
 }
-

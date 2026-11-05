@@ -6,60 +6,7 @@ part of 'home_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homeRemoteDataSourceHash() =>
-    r'2e43ca6f13823eae636cf8a5a3c6f5ef97a4cd07';
-
-/// See also [homeRemoteDataSource].
-@ProviderFor(homeRemoteDataSource)
-final homeRemoteDataSourceProvider =
-    AutoDisposeProvider<HomeRemoteDataSource>.internal(
-      homeRemoteDataSource,
-      name: r'homeRemoteDataSourceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$homeRemoteDataSourceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef HomeRemoteDataSourceRef = AutoDisposeProviderRef<HomeRemoteDataSource>;
-String _$homeRepositoryHash() => r'436b30460c7924bd03ff4476c09bf88ab370d3af';
-
-/// See also [homeRepository].
-@ProviderFor(homeRepository)
-final homeRepositoryProvider = AutoDisposeProvider<HomeRepositoryImpl>.internal(
-  homeRepository,
-  name: r'homeRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$homeRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef HomeRepositoryRef = AutoDisposeProviderRef<HomeRepositoryImpl>;
-String _$getHomeSectionsHash() => r'ed79845a1fff669ffd45e7974ec0488ae830892e';
-
-/// See also [getHomeSections].
-@ProviderFor(getHomeSections)
-final getHomeSectionsProvider = AutoDisposeProvider<GetHomeSections>.internal(
-  getHomeSections,
-  name: r'getHomeSectionsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getHomeSectionsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetHomeSectionsRef = AutoDisposeProviderRef<GetHomeSections>;
-String _$homeNotifierHash() => r'82ff034bb026f7f0161279bbf5f9b009aaa4e65d';
+String _$homeNotifierHash() => r'133ae2920973e96d62fd0c14b0a8aa913c799472';
 
 /// See also [HomeNotifier].
 @ProviderFor(HomeNotifier)

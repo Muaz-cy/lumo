@@ -77,3 +77,13 @@ flutter run
 ## Design System
 
 Lumo uses a custom design system (`lib/shared/design_system/`) built around a warm Ethiopian color palette, the Geist typeface, and a consistent spacing/motion system — ensuring every screen feels intentional and premium.
+
+---
+
+## Team
+
+**Solo Project**
+
+| Name | ID |
+|---|---|
+| Muaz Khalid | CTC-1913 |

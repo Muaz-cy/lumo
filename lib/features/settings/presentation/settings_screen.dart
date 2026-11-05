@@ -3,6 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lumo/shared/design_system/design_system.dart';
+import 'package:lumo/shared/providers/currency_provider.dart';
+import 'package:lumo/shared/providers/locale_provider.dart';
 import 'package:lumo/shared/providers/theme_provider.dart';
 import '../providers/settings_providers.dart';
 
@@ -18,6 +20,8 @@ class SettingsScreen extends ConsumerWidget {
     final themeMode = ref.watch(themeNotifierProvider);
     final settings = ref.watch(settingsNotifierProvider);
     final notifier = ref.read(settingsNotifierProvider.notifier);
+    final locale = ref.watch(localeNotifierProvider);
+    final currency = ref.watch(currencyDisplayNotifierProvider);
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -44,6 +48,26 @@ class SettingsScreen extends ConsumerWidget {
           LumoSpacing.space80,
         ),
         children: [
+          // Language
+          _SettingsSection(
+            title: 'Language',
+            children: [
+              _LanguageSelector(currentLocale: locale, ref: ref),
+            ],
+          ),
+
+          const SizedBox(height: LumoSpacing.space16),
+
+          // Currency
+          _SettingsSection(
+            title: 'Currency Display',
+            children: [
+              _CurrencySelector(current: currency, ref: ref),
+            ],
+          ),
+
+          const SizedBox(height: LumoSpacing.space16),
+
           // Appearance
           _SettingsSection(
             title: 'Appearance',
@@ -183,6 +207,172 @@ class _SettingsSection extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ─── Language Selector ───────────────────────────────────────────────────────
+
+class _LanguageSelector extends StatelessWidget {
+  const _LanguageSelector({required this.currentLocale, required this.ref});
+  final Locale currentLocale;
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    final isEn = currentLocale.languageCode == 'en';
+    return _SettingRow(
+      icon: Icons.language_rounded,
+      label: 'Language',
+      control: _SegmentedRow(
+        options: const ['English', 'አማርኛ'],
+        selectedIndex: isEn ? 0 : 1,
+        onSelect: (i) => i == 0
+            ? ref.read(localeNotifierProvider.notifier).setEnglish()
+            : ref.read(localeNotifierProvider.notifier).setAmharic(),
+      ),
+    );
+  }
+}
+
+// ─── Currency Selector ────────────────────────────────────────────────────────
+
+class _CurrencySelector extends StatelessWidget {
+  const _CurrencySelector({required this.current, required this.ref});
+  final CurrencyDisplay current;
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    final isUsd = current == CurrencyDisplay.usd;
+    return _SettingRow(
+      icon: Icons.currency_exchange_rounded,
+      label: 'Price display',
+      sublabel: 'ETB is the listing price. USD is an estimate.',
+      control: _SegmentedRow(
+        options: const ['ETB', 'USD'],
+        selectedIndex: isUsd ? 1 : 0,
+        onSelect: (i) => ref
+            .read(currencyDisplayNotifierProvider.notifier)
+            .set(i == 0 ? CurrencyDisplay.etb : CurrencyDisplay.usd),
+      ),
+    );
+  }
+}
+
+// ─── Shared setting row ───────────────────────────────────────────────────────
+
+class _SettingRow extends StatelessWidget {
+  const _SettingRow({
+    required this.icon,
+    required this.label,
+    required this.control,
+    this.sublabel,
+  });
+  final IconData icon;
+  final String label;
+  final String? sublabel;
+  final Widget control;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: LumoSpacing.space16,
+        vertical: LumoSpacing.space14,
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: colors.onSurface.withValues(alpha: 0.5)),
+          const SizedBox(width: LumoSpacing.space16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label,
+                    style: LumoTypography.bodyMedium
+                        .copyWith(color: colors.onSurface)),
+                if (sublabel != null)
+                  Text(sublabel!,
+                      style: LumoTypography.labelSmall.copyWith(
+                          color: colors.onSurface.withValues(alpha: 0.35))),
+              ],
+            ),
+          ),
+          const SizedBox(width: LumoSpacing.space16),
+          control,
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Segmented row — minimal underline style ──────────────────────────────────
+
+class _SegmentedRow extends StatelessWidget {
+  const _SegmentedRow({
+    required this.options,
+    required this.selectedIndex,
+    required this.onSelect,
+  });
+  final List<String> options;
+  final int selectedIndex;
+  final ValueChanged<int> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: colors.outline.withValues(alpha: 0.5)),
+        borderRadius: LumoRadius.borderSmall,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: options.asMap().entries.map((e) {
+          final isSelected = e.key == selectedIndex;
+          final isFirst = e.key == 0;
+          final isLast = e.key == options.length - 1;
+          return GestureDetector(
+            onTap: () => onSelect(e.key),
+            child: AnimatedContainer(
+              duration: LumoMotion.fast,
+              padding: const EdgeInsets.symmetric(
+                horizontal: LumoSpacing.space12,
+                vertical: LumoSpacing.space8,
+              ),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? colors.onSurface.withValues(alpha: 0.06)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.horizontal(
+                  left: isFirst ? const Radius.circular(LumoRadius.small - 1) : Radius.zero,
+                  right: isLast ? const Radius.circular(LumoRadius.small - 1) : Radius.zero,
+                ),
+                border: isSelected
+                    ? Border(
+                        bottom: BorderSide(
+                          color: colors.onSurface.withValues(alpha: 0.5),
+                          width: 1.5,
+                        ),
+                      )
+                    : null,
+              ),
+              child: Text(
+                e.value,
+                style: LumoTypography.labelMedium.copyWith(
+                  color: isSelected
+                      ? colors.onSurface
+                      : colors.onSurface.withValues(alpha: 0.4),
+                  fontWeight:
+                      isSelected ? FontWeight.w600 : FontWeight.w400,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }

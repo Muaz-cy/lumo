@@ -1,0 +1,230 @@
+{
+  "@@locale": "am",
+
+  "appName": "ሉሞ",
+
+  "splashTagline": "ቤትዎ፣ ወደ ቤት።",
+
+  "onboardingHeadline1": "በተለየ መንገድ\nያግኙ።",
+  "onboardingSubheadline1": "ለዲያስፖራ የተዘጋጀ\nየኢትዮጵያ ሪል እስቴት።",
+  "onboardingHeadline2": "በእምነት\nይዋዕሉ።",
+  "onboardingSubheadline2": "ግልጽ ዋጋ።\nተረጋግጦ የቀረበ ዝርዝር። ምንም አስደንጋጭ ነገር የለም።",
+  "onboardingHeadline3": "የሚታመን\nአማካሪዎ።",
+  "onboardingSubheadline3": "ቤቶችን ብቻ አንዘረዝርም።\nውሳኔዎን እንመራለን።",
+  "onboardingContinue": "ቀጥል",
+  "onboardingGetStarted": "ጀምር",
+  "onboardingSkip": "ዝለል",
+
+  "authSignIn": "ግባ",
+  "authSignUp": "መለያ ፍጠር",
+  "authEmail": "የኢሜይል አድራሻ",
+  "authPassword": "የይለፍ ቃል",
+  "authFullName": "ሙሉ ስም",
+  "authForgotPassword": "የይለፍ ቃል ረሳህ?",
+  "authNoAccount": "መለያ የለህም?",
+  "authHaveAccount": "መለያ አለህ?",
+  "authContinueAsGuest": "ያለ መለያ ዳስስ",
+  "authOrContinueWith": "ወይም በዚህ ቀጥል",
+  "authSignInWithGoogle": "በGoogle ቀጥል",
+  "authSignInWithApple": "በApple ቀጥል",
+
+  "homeGreetingMorning": "እንደምን አደርክ",
+  "homeGreetingAfternoon": "እንደምን ዋልክ",
+  "homeGreetingEvening": "እንደምን አመሸህ",
+  "homeDiscover": "ዛሬ ያግኙ።",
+  "homeFeatured": "ተለይቶ የቀረበ",
+  "homeTrending": "አሁን ተፈላጊ",
+  "homeNewListings": "አዲስ ዝርዝሮች",
+  "homeForYou": "ለእርስዎ",
+  "homeSeeAll": "ሁሉንም ይመልከቱ",
+  "homeNeighborhoods": "አካባቢዎችን ያስሱ",
+  "homeInvestmentPicks": "የኢንቨስትመንት ምርጫዎች",
+
+  "searchPlaceholder": "ቤቶችን፣ አካባቢዎችን ይፈልጉ...",
+  "searchRecent": "የቅርብ ጊዜ ፍለጋዎች",
+  "searchTrending": "ተፈላጊ",
+  "searchNoResults": "ምንም ቤት አልተገኘም",
+  "searchNoResultsHint": "ሌላ አካባቢ ወይም የዋጋ ክልል ይሞክሩ።",
+
+  "propertyBedrooms": "{count} መኝታ",
+  "@propertyBedrooms": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "propertyBathrooms": "{count} መታጠቢያ",
+  "@propertyBathrooms": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "propertyArea": "{area} ካሬ ሜትር",
+  "@propertyArea": {
+    "placeholders": {
+      "area": { "type": "double" }
+    }
+  },
+  "propertyVerified": "ተረጋግጧል",
+  "propertyFeatured": "ተለይቶ የቀረበ",
+  "propertyNewListing": "አዲስ",
+  "propertyForSale": "ለሽያጭ",
+  "propertyForRent": "ለኪራይ",
+  "propertyTitleDeedConfirmed": "የቤት ሰነድ ተረጋግጧል",
+  "propertyTeamVerified": "በሉሞ ተረጋግጧል",
+  "propertyAbout": "ስለ ቤቱ",
+  "propertyFeatures": "ባህሪያት",
+  "propertyLocation": "አካባቢ",
+  "propertyNeighborhood": "ሰፈር",
+  "propertyInvestmentInsight": "የኢንቨስትመንት ትንታኔ",
+  "propertyPriceHistory": "የዋጋ ታሪክ",
+  "propertyNearby": "አቅራቢያ ያሉ ቤቶች",
+  "propertyContact": "ፍላጎት ያሳዩ",
+  "propertySave": "አስቀምጥ",
+  "propertySaved": "ተቀምጧል",
+  "propertyShare": "አጋራ",
+  "propertyFloor": "ፎቅ {number}",
+  "@propertyFloor": {
+    "placeholders": {
+      "number": { "type": "int" }
+    }
+  },
+  "propertyYearBuilt": "የተሰራው {year}",
+  "@propertyYearBuilt": {
+    "placeholders": {
+      "year": { "type": "int" }
+    }
+  },
+
+  "priceETB": "ብር {amount}",
+  "@priceETB": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "priceUSD": "≈ ዶላር {amount}",
+  "@priceUSD": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "pricePerSqm": "ብር {amount}/ካሬ ሜ",
+  "@pricePerSqm": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "exchangeRateUpdated": "ዋጋ የተዘመነው {time}",
+  "@exchangeRateUpdated": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+
+  "savedTitle": "የተቀመጡ",
+  "savedEmpty": "ምንም አልተቀመጠም",
+  "savedEmptyHint": "የሚቀምጧቸው ቤቶች እዚህ ይታያሉ።",
+  "savedStartExploring": "ማሰስ ጀምር",
+
+  "inquiryTitle": "ፍላጎት ያሳዩ",
+  "inquirySubtitle": "ቡድናችን በ24 ሰዓት ውስጥ ያነጋግርዎታል።",
+  "inquiryName": "ስምዎ",
+  "inquiryPhone": "ስልክ ቁጥር",
+  "inquiryMessage": "መልዕክት (አማራጭ)",
+  "inquiryMessageHint": "ስለ ጊዜዎ፣ በጀትዎ ወይም ጥያቄዎ ይንገሩን።",
+  "inquirySubmit": "ጥያቄ ላክ",
+  "inquirySuccess": "ጥያቄ ተልኳል",
+  "inquirySuccessMessage": "ቡድናችን በ24 ሰዓት ውስጥ ያነጋግርዎታል።",
+  "inquiryMyInquiries": "ጥያቄዎቼ",
+
+  "neighborhoodAbout": "ስለ {name}",
+  "@neighborhoodAbout": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "neighborhoodGrowth": "{percent}% እድገት",
+  "@neighborhoodGrowth": {
+    "placeholders": {
+      "percent": { "type": "String" }
+    }
+  },
+  "neighborhoodAvgPrice": "አማካይ ብር {price}/ካሬ ሜ",
+  "@neighborhoodAvgPrice": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+
+  "brokerSubmitListing": "ዝርዝር አስገባ",
+  "brokerMyListings": "ዝርዝሮቼ",
+  "brokerStatusPending": "በግምገማ ላይ",
+  "brokerStatusApproved": "ቀጥሎ ነው",
+  "brokerStatusRejected": "አልተፈቀደም",
+  "brokerReviewNote": "ቡድናችን ዝርዝሮችን በ3 የስራ ቀናት ውስጥ ይገመግማል። ቦታውን በአካል ሊጎበኝ ይችላል።",
+
+  "profileTitle": "መገለጫ",
+  "profileAccount": "መለያ",
+  "profileSaved": "የተቀመጡ ቤቶች",
+  "profileInquiries": "ጥያቄዎቼ",
+  "profileSettings": "ቅንብሮች",
+  "profileSignOut": "ውጣ",
+  "profileBrokerPortal": "የደላላ ፖርታል",
+
+  "settingsTitle": "ቅንብሮች",
+  "settingsLanguage": "ቋንቋ",
+  "settingsTheme": "መልክ",
+  "settingsThemeLight": "ብርሃን",
+  "settingsThemeDark": "ጨለማ",
+  "settingsThemeSystem": "ስርዓት",
+  "settingsCurrency": "የምንዛሬ ማሳያ",
+  "settingsNotifications": "ማሳወቂያዎች",
+  "settingsPrivacy": "የግላዊነት ፖሊሲ",
+  "settingsTerms": "የአገልግሎት ውሎች",
+  "settingsAbout": "ስለ ሉሞ",
+  "settingsVersion": "ስሪት {version}",
+  "@settingsVersion": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+
+  "notificationsTitle": "ማሳወቂያዎች",
+  "notificationsEmpty": "ሁሉም ተነቦዋል",
+  "notificationsEmptyHint": "ስለ የተቀመጡ ቤቶችዎ እና ጥያቄዎችዎ እናሳውቅዎታለን።",
+
+  "errorGeneric": "ችግር ተፈጥሯል።",
+  "errorNetwork": "ግንኙነትዎን ያረጋግጡ እና እንደገና ይሞክሩ።",
+  "errorRetry": "እንደገና ሞክር",
+  "errorGoBack": "ተመለስ",
+  "errorNotFound": "አልተገኘም",
+  "errorNotFoundHint": "ይህ ቤት ከእንግዲህ ላይኖር ይችላል።",
+
+  "filterTitle": "አጣራ",
+  "filterPropertyType": "የቤት አይነት",
+  "filterPriceRange": "የዋጋ ክልል",
+  "filterBedrooms": "መኝታ ቤቶች",
+  "filterBathrooms": "መታጠቢያ ቤቶች",
+  "filterAreaRange": "ስፋት (ካሬ ሜ)",
+  "filterNeighborhood": "ሰፈር",
+  "filterApply": "አጣሪዎችን ተግብር",
+  "filterReset": "ዳግም አስጀምር",
+  "filterResults": "{count} ቤቶች",
+  "@filterResults": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "typeApartment": "አፓርትመንት",
+  "typeVilla": "ቪላ",
+  "typeCommercial": "ንግድ",
+  "typeLand": "መሬት",
+  "typeOffice": "ቢሮ",
+  "typeWarehouse": "መጋዘን",
+
+  "navHome": "ዋና",
+  "navSearch": "ፈልግ",
+  "navSaved": "የተቀመጡ",
+  "navInquiries": "ጥያቄዎች",
+  "navProfile": "መገለጫ"
+}

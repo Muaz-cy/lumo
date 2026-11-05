@@ -75,6 +75,12 @@ class AuthNotifier extends _$AuthNotifier {
     final result = await _repo.signInWithGoogle();
     return result.fold(
       (failure) {
+        // 'oauth_pending' is not an error — browser opened successfully.
+        // The real result arrives via authStateChanges stream.
+        if (failure.message == 'oauth_pending') {
+          state = const AsyncData(null);
+          return true;
+        }
         state = AsyncError(failure.message, StackTrace.current);
         return false;
       },
@@ -90,6 +96,10 @@ class AuthNotifier extends _$AuthNotifier {
     final result = await _repo.signInWithApple();
     return result.fold(
       (failure) {
+        if (failure.message == 'oauth_pending') {
+          state = const AsyncData(null);
+          return true;
+        }
         state = AsyncError(failure.message, StackTrace.current);
         return false;
       },

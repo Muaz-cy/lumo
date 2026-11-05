@@ -6,26 +6,8 @@ part of 'wishlist_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$wishlistBoxHash() => r'0d21cabc8deefce36a9026514474eeb0321db024';
-
-/// See also [wishlistBox].
-@ProviderFor(wishlistBox)
-final wishlistBoxProvider =
-    AutoDisposeProvider<Box<WishlistItemHiveModel>>.internal(
-      wishlistBox,
-      name: r'wishlistBoxProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$wishlistBoxHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef WishlistBoxRef = AutoDisposeProviderRef<Box<WishlistItemHiveModel>>;
 String _$wishlistRepositoryHash() =>
-    r'afeb1f5dd49e785c0ebcff678e2c080ada8ab05f';
+    r'ef716d665c31fe8130e181fdeeec0b1dbfc361f9';
 
 /// See also [wishlistRepository].
 @ProviderFor(wishlistRepository)

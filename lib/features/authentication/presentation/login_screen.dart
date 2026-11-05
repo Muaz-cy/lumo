@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../shared/design_system/design_system.dart';
 import '../providers/auth_providers.dart';
@@ -29,23 +30,43 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
+  Future<void> _navigateAfterOAuth() async {
+    final rawUser = Supabase.instance.client.auth.currentUser;
+    final user = await ref.read(authRepositoryProvider).fetchUserWithRole(rawUser);
+    if (!mounted) return;
+    if (user?.isBroker == true) {
+      context.go(LumoRoutes.brokerDashboard);
+    } else {
+      context.go(LumoRoutes.home);
+    }
+  }
+
   Future<void> _signIn() async {
     if (!_formKey.currentState!.validate()) return;
     final success = await ref.read(authNotifierProvider.notifier).signInWithEmail(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
-    if (success && mounted) context.go(LumoRoutes.home);
+    if (!success || !mounted) return;
+
+    // Fetch role and route accordingly
+    final rawUser = Supabase.instance.client.auth.currentUser;
+    final user = await ref.read(authRepositoryProvider).fetchUserWithRole(rawUser);
+    if (!mounted) return;
+    if (user?.isBroker == true) {
+      context.go(LumoRoutes.brokerDashboard);
+    } else {
+      context.go(LumoRoutes.home);
+    }
   }
 
   Future<void> _signInWithGoogle() async {
-    final success = await ref.read(authNotifierProvider.notifier).signInWithGoogle();
-    if (success && mounted) context.go(LumoRoutes.home);
+    // OAuth result arrives via authStateChanges — navigation handled by splash/router
+    await ref.read(authNotifierProvider.notifier).signInWithGoogle();
   }
 
   Future<void> _signInWithApple() async {
-    final success = await ref.read(authNotifierProvider.notifier).signInWithApple();
-    if (success && mounted) context.go(LumoRoutes.home);
+    await ref.read(authNotifierProvider.notifier).signInWithApple();
   }
 
   Future<void> _continueAsGuest() async {
@@ -73,7 +94,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     });
 
+    // Navigate correctly when OAuth redirect completes
+    ref.listen(authStateChangesProvider, (_, next) {
+      next.whenData((user) {
+        if (user != null) _navigateAfterOAuth();
+      });
+    });
+
     return Scaffold(
+      backgroundColor: LumoColors.lightBackground,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: LumoSpacing.space24),
@@ -188,18 +217,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: LumoSpacing.space24),
 
                 // Sign in button
-                ElevatedButton(
-                  onPressed: isLoading ? null : _signIn,
-                  child: isLoading
-                      ? SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: colors.onPrimary,
-                          ),
-                        )
-                      : const Text('Sign in'),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: isLoading ? null : _signIn,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: LumoColors.lightGold,
+                      foregroundColor: LumoColors.white,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: LumoSpacing.space16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: LumoRadius.borderLarge,
+                      ),
+                    ),
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: LumoColors.white,
+                            ),
+                          )
+                        : const Text('Sign in'),
+                  ),
                 )
                     .animate()
                     .fadeIn(
@@ -282,6 +324,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       'Browse without an account',
                       style: LumoTypography.labelMedium.copyWith(
                         color: colors.onSurface.withValues(alpha: 0.35),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: LumoSpacing.space32),
+
+                // Broker entry point — subtle, below the fold, professional
+                Center(
+                  child: GestureDetector(
+                    onTap: () => context.push(LumoRoutes.brokerApply),
+                    child: Text(
+                      'Are you a broker? Apply to list on Lumo',
+                      style: LumoTypography.labelSmall.copyWith(
+                        color: colors.onSurface.withValues(alpha: 0.28),
+                        decoration: TextDecoration.underline,
+                        decorationColor: colors.onSurface.withValues(alpha: 0.18),
                       ),
                     ),
                   ),

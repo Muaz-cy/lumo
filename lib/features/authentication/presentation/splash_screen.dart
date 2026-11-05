@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../shared/design_system/design_system.dart';
 import 'package:lumo/features/authentication/providers/auth_providers.dart';
+import 'package:lumo/shared/providers/theme_provider.dart';
 
 /// Lumo Splash Screen
 /// The first signature moment. Users should feel they are entering
@@ -20,19 +22,33 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigate();
+    _initAndNavigate();
   }
 
-  Future<void> _navigate() async {
-    // Let the logo breathe — minimum 2 seconds of presence
+  Future<void> _initAndNavigate() async {
+    await ref.read(themeNotifierProvider.notifier).initialize();
     await Future.delayed(const Duration(milliseconds: 2200));
     if (!mounted) return;
 
-    final user = ref.read(currentUserProvider);
-    if (user != null) {
-      context.go(LumoRoutes.home);
-    } else {
+    final rawUser = Supabase.instance.client.auth.currentUser;
+    if (rawUser == null) {
       context.go(LumoRoutes.onboarding);
+      return;
+    }
+
+    // Fetch full user with role from profiles table
+    final user = await ref
+        .read(authRepositoryProvider)
+        .fetchUserWithRole(rawUser);
+
+    if (!mounted) return;
+
+    if (user == null) {
+      context.go(LumoRoutes.onboarding);
+    } else if (user.isBroker) {
+      context.go(LumoRoutes.brokerDashboard);
+    } else {
+      context.go(LumoRoutes.home);
     }
   }
 
@@ -86,7 +102,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
             // Tagline
             Text(
-              'Shopping, redefined.',
+              'Your home, back home.',
               style: LumoTypography.bodySmall.copyWith(
                 color: colors.onSurface.withValues(alpha: 0.4),
                 letterSpacing: 1.5,

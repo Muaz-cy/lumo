@@ -5,78 +5,55 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lumo/core/router/app_router.dart';
 import 'package:lumo/features/authentication/providers/auth_providers.dart';
-import 'package:lumo/features/orders/providers/orders_providers.dart';
+import 'package:lumo/features/inquiry/providers/inquiry_providers.dart';
+import 'package:lumo/features/wishlist/providers/saved_providers.dart';
 import 'package:lumo/shared/design_system/design_system.dart';
-import 'package:lumo/shared/widgets/lumo_skeleton.dart';
 
-/// Lumo Profile Screen
-/// Emotional purpose: Make the user feel known. This is their space.
-/// Clean, personal, and a gateway to everything account-related.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
-    final ordersAsync = ref.watch(ordersListProvider);
-    final colors = Theme.of(context).colorScheme;
+    final savedCount = ref.watch(savedNotifierProvider).length;
+    final inquiryCount = ref.watch(inquiryNotifierProvider).length;
 
     return Scaffold(
-      backgroundColor: colors.surface,
+      backgroundColor: LumoColors.lightBackground,
       body: SafeArea(
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            // Header
-            SliverToBoxAdapter(
-              child: _ProfileHeader(user: user),
-            ),
+            SliverToBoxAdapter(child: _Header(user: user)),
 
-            // Stats row
             SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: LumoSpacing.space24,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: LumoSpacing.space24),
               sliver: SliverToBoxAdapter(
-                child: ordersAsync.when(
-                  loading: () => const _StatsSkeleton(),
-                  error: (_, __) => const SizedBox.shrink(),
-                  data: (orders) => _StatsRow(orderCount: orders.length),
-                ),
+                child: _StatsRow(savedCount: savedCount, inquiryCount: inquiryCount),
               ),
             ),
 
-            const SliverToBoxAdapter(
-              child: SizedBox(height: LumoSpacing.space32),
-            ),
+            const SliverToBoxAdapter(child: SizedBox(height: LumoSpacing.space32)),
 
-            // Menu sections
             SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: LumoSpacing.space24,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: LumoSpacing.space24),
               sliver: SliverToBoxAdapter(
                 child: _MenuSection(
-                  title: 'Shopping',
+                  title: 'My Activity',
                   items: [
                     _MenuItem(
-                      icon: Icons.receipt_long_outlined,
-                      label: 'My Orders',
-                      onTap: () => context.push(LumoRoutes.orders),
-                    ),
-                    _MenuItem(
-                      icon: Icons.favorite_border_rounded,
-                      label: 'Wishlist',
+                      icon: Icons.bookmark_border_rounded,
+                      label: 'Saved Properties',
                       onTap: () => context.go(LumoRoutes.wishlist),
                     ),
                     _MenuItem(
-                      icon: Icons.location_on_outlined,
-                      label: 'Saved Addresses',
-                      onTap: () {},
+                      icon: Icons.chat_bubble_outline_rounded,
+                      label: 'My Inquiries',
+                      onTap: () => context.push(LumoRoutes.inquiries),
                     ),
                     _MenuItem(
-                      icon: Icons.credit_card_outlined,
-                      label: 'Payment Methods',
+                      icon: Icons.history_rounded,
+                      label: 'Recently Viewed',
                       onTap: () {},
                     ),
                   ],
@@ -84,14 +61,10 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ),
 
-            const SliverToBoxAdapter(
-              child: SizedBox(height: LumoSpacing.space16),
-            ),
+            const SliverToBoxAdapter(child: SizedBox(height: LumoSpacing.space16)),
 
             SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: LumoSpacing.space24,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: LumoSpacing.space24),
               sliver: SliverToBoxAdapter(
                 child: _MenuSection(
                   title: 'Account',
@@ -100,6 +73,17 @@ class ProfileScreen extends ConsumerWidget {
                       icon: Icons.notifications_outlined,
                       label: 'Notifications',
                       onTap: () => context.push(LumoRoutes.notifications),
+                    ),
+                    _MenuItem(
+                      icon: Icons.language_outlined,
+                      label: 'Language',
+                      onTap: () {},
+                      trailing: Text(
+                        'English',
+                        style: LumoTypography.bodySmall.copyWith(
+                          color: LumoColors.lightTextSecondary,
+                        ),
+                      ),
                     ),
                     _MenuItem(
                       icon: Icons.settings_outlined,
@@ -116,15 +100,10 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ),
 
-            const SliverToBoxAdapter(
-              child: SizedBox(height: LumoSpacing.space16),
-            ),
+            const SliverToBoxAdapter(child: SizedBox(height: LumoSpacing.space16)),
 
-            // Sign out
             SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: LumoSpacing.space24,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: LumoSpacing.space24),
               sliver: SliverToBoxAdapter(
                 child: _SignOutButton(
                   onTap: () async {
@@ -135,9 +114,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ),
 
-            const SliverToBoxAdapter(
-              child: SizedBox(height: LumoSpacing.space80),
-            ),
+            const SliverToBoxAdapter(child: SizedBox(height: LumoSpacing.space80)),
           ],
         ),
       ),
@@ -145,78 +122,102 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-// ─── Profile Header ───────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// Header
+// ─────────────────────────────────────────────
 
-class _ProfileHeader extends StatelessWidget {
-  const _ProfileHeader({required this.user});
-  final dynamic user; // AuthUserEntity?
+class _Header extends StatelessWidget {
+  const _Header({required this.user});
+  final dynamic user;
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final name = user?.displayName ?? 'Guest';
+    final isGuest = user == null || user.isGuest;
+    final name = user?.displayName?.isNotEmpty == true
+        ? user!.displayName!
+        : (user?.email?.isNotEmpty == true ? user!.email!.split('@').first : 'Guest');
     final email = user?.email ?? '';
     final avatarUrl = user?.avatarUrl;
-    final initials = name.isNotEmpty ? name[0].toUpperCase() : 'G';
+    final initial = name.isNotEmpty ? name[0].toUpperCase() : 'G';
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        LumoSpacing.space24,
-        LumoSpacing.space32,
-        LumoSpacing.space24,
-        LumoSpacing.space24,
+        LumoSpacing.space24, LumoSpacing.space32,
+        LumoSpacing.space24, LumoSpacing.space24,
       ),
       child: Row(
         children: [
           // Avatar
           Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
+            width: 64, height: 64,
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: colors.primaryContainer,
+              color: LumoColors.lightSurfaceSecondary,
             ),
             clipBehavior: Clip.antiAlias,
             child: avatarUrl != null
                 ? CachedNetworkImage(
                     imageUrl: avatarUrl,
                     fit: BoxFit.cover,
-                    errorWidget: (_, __, ___) => _AvatarInitial(
-                      initial: initials,
-                      colors: colors,
-                    ),
+                    errorWidget: (_, __, ___) => _Initial(initial: initial),
                   )
-                : _AvatarInitial(initial: initials, colors: colors),
+                : _Initial(initial: initial),
           ),
           const SizedBox(width: LumoSpacing.space16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: LumoTypography.headlineSmall.copyWith(
-                    color: colors.onSurface,
-                  ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        name,
+                        style: LumoTypography.headlineSmall.copyWith(
+                          color: LumoColors.lightPrimary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: LumoSpacing.space8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: LumoSpacing.space8, vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: LumoColors.lightSurfaceSecondary,
+                        borderRadius: LumoRadius.borderPill,
+                        border: Border.all(color: LumoColors.lightBorder),
+                      ),
+                      child: Text(
+                        isGuest ? 'Guest' : 'Member',
+                        style: LumoTypography.labelSmall.copyWith(
+                          color: LumoColors.lightTextSecondary,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                if (email.isNotEmpty) ...[
-                  const SizedBox(height: LumoSpacing.space2),
+                const SizedBox(height: LumoSpacing.space4),
+                if (email.isNotEmpty)
                   Text(
                     email,
                     style: LumoTypography.bodySmall.copyWith(
-                      color: colors.onSurface.withValues(alpha: 0.45),
+                      color: LumoColors.lightTextSecondary,
+                    ),
+                  )
+                else
+                  GestureDetector(
+                    onTap: () => context.go(LumoRoutes.login),
+                    child: Text(
+                      'Sign in to save properties',
+                      style: LumoTypography.labelMedium.copyWith(
+                        color: LumoColors.lightGold,
+                      ),
                     ),
                   ),
-                ],
               ],
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.edit_outlined,
-              size: 20,
-              color: colors.onSurface.withValues(alpha: 0.45),
             ),
           ),
         ],
@@ -228,10 +229,9 @@ class _ProfileHeader extends StatelessWidget {
   }
 }
 
-class _AvatarInitial extends StatelessWidget {
-  const _AvatarInitial({required this.initial, required this.colors});
+class _Initial extends StatelessWidget {
+  const _Initial({required this.initial});
   final String initial;
-  final ColorScheme colors;
 
   @override
   Widget build(BuildContext context) {
@@ -239,36 +239,38 @@ class _AvatarInitial extends StatelessWidget {
       child: Text(
         initial,
         style: LumoTypography.headlineMedium.copyWith(
-          color: colors.onPrimaryContainer,
+          color: LumoColors.lightTextSecondary,
         ),
       ),
     );
   }
 }
 
-// ─── Stats Row ────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// Stats row
+// ─────────────────────────────────────────────
 
 class _StatsRow extends StatelessWidget {
-  const _StatsRow({required this.orderCount});
-  final int orderCount;
+  const _StatsRow({required this.savedCount, required this.inquiryCount});
+  final int savedCount;
+  final int inquiryCount;
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Container(
       padding: const EdgeInsets.symmetric(vertical: LumoSpacing.space20),
       decoration: BoxDecoration(
-        color: colors.surfaceContainerHighest,
+        color: LumoColors.lightSurface,
         borderRadius: LumoRadius.borderLarge,
+        border: Border.all(color: LumoColors.lightBorder),
       ),
       child: Row(
         children: [
-          _StatItem(value: '$orderCount', label: 'Orders'),
-          _StatDivider(),
-          _StatItem(value: '0', label: 'Reviews'),
-          _StatDivider(),
-          _StatItem(value: '0', label: 'Saved'),
+          _StatItem(value: '$savedCount', label: 'Saved'),
+          Container(width: 1, height: 28, color: LumoColors.lightDivider),
+          _StatItem(value: '$inquiryCount', label: 'Inquiries'),
+          Container(width: 1, height: 28, color: LumoColors.lightDivider),
+          const _StatItem(value: '0', label: 'Viewed'),
         ],
       ),
     )
@@ -285,22 +287,20 @@ class _StatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Expanded(
       child: Column(
         children: [
           Text(
             value,
             style: LumoTypography.headlineSmall.copyWith(
-              color: colors.onSurface,
+              color: LumoColors.lightPrimary,
             ),
           ),
           const SizedBox(height: LumoSpacing.space4),
           Text(
             label,
             style: LumoTypography.bodySmall.copyWith(
-              color: colors.onSurface.withValues(alpha: 0.45),
+              color: LumoColors.lightTextSecondary,
             ),
           ),
         ],
@@ -309,31 +309,9 @@ class _StatItem extends StatelessWidget {
   }
 }
 
-class _StatDivider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 1,
-      height: 32,
-      color: Theme.of(context).colorScheme.outline,
-    );
-  }
-}
-
-class _StatsSkeleton extends StatelessWidget {
-  const _StatsSkeleton();
-
-  @override
-  Widget build(BuildContext context) {
-    return LumoSkeleton(
-      width: double.infinity,
-      height: 80,
-      borderRadius: LumoRadius.borderLarge,
-    );
-  }
-}
-
-// ─── Menu Section ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// Menu section
+// ─────────────────────────────────────────────
 
 class _MenuSection extends StatelessWidget {
   const _MenuSection({required this.title, required this.items});
@@ -342,28 +320,28 @@ class _MenuSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(
             left: LumoSpacing.space4,
-            bottom: LumoSpacing.space8,
+            bottom: LumoSpacing.space10,
           ),
           child: Text(
-            title,
-            style: LumoTypography.labelMedium.copyWith(
-              color: colors.onSurface.withValues(alpha: 0.4),
-              letterSpacing: 0.8,
+            title.toUpperCase(),
+            style: LumoTypography.labelSmall.copyWith(
+              color: LumoColors.lightTextTertiary,
+              letterSpacing: 1.2,
+              fontSize: 10,
             ),
           ),
         ),
         Container(
           decoration: BoxDecoration(
-            color: colors.surfaceContainerHighest,
+            color: LumoColors.lightSurface,
             borderRadius: LumoRadius.borderLarge,
+            border: Border.all(color: LumoColors.lightBorder),
           ),
           child: Column(
             children: items.asMap().entries.map((e) {
@@ -374,8 +352,8 @@ class _MenuSection extends StatelessWidget {
                   if (!isLast)
                     Divider(
                       height: 1,
-                      indent: LumoSpacing.space48,
-                      color: colors.outline,
+                      indent: LumoSpacing.space52,
+                      color: LumoColors.lightDivider,
                     ),
                 ],
               );
@@ -404,10 +382,8 @@ class _MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final color = destructive
-        ? colors.error
-        : colors.onSurface;
+    final labelColor = destructive ? LumoColors.lightError : LumoColors.lightPrimary;
+    final iconColor = destructive ? LumoColors.lightError : LumoColors.lightTextSecondary;
 
     return InkWell(
       onTap: onTap,
@@ -419,19 +395,19 @@ class _MenuItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, size: 20, color: color.withValues(alpha: 0.7)),
+            Icon(icon, size: 20, color: iconColor),
             const SizedBox(width: LumoSpacing.space16),
             Expanded(
               child: Text(
                 label,
-                style: LumoTypography.bodyMedium.copyWith(color: color),
+                style: LumoTypography.bodyMedium.copyWith(color: labelColor),
               ),
             ),
             trailing ??
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  size: 14,
-                  color: colors.onSurface.withValues(alpha: 0.25),
+                  size: 13,
+                  color: LumoColors.lightTextTertiary,
                 ),
           ],
         ),
@@ -440,7 +416,9 @@ class _MenuItem extends StatelessWidget {
   }
 }
 
-// ─── Sign Out ─────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// Sign out
+// ─────────────────────────────────────────────
 
 class _SignOutButton extends StatelessWidget {
   const _SignOutButton({required this.onTap});
@@ -448,12 +426,11 @@ class _SignOutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Container(
       decoration: BoxDecoration(
-        color: colors.errorContainer.withValues(alpha: 0.4),
+        color: LumoColors.lightSurface,
         borderRadius: LumoRadius.borderLarge,
+        border: Border.all(color: LumoColors.lightBorder),
       ),
       child: _MenuItem(
         icon: Icons.logout_rounded,

@@ -1,0 +1,137 @@
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Lumo — Media Seed Fix
+-- Run this in Supabase SQL Editor (uses service role, bypasses RLS).
+-- Step 1: Temporarily allow service-role inserts on property_media
+-- Step 2: Insert all media rows
+-- ─────────────────────────────────────────────────────────────────────────────
+
+-- 1. Add a policy that lets the postgres/service role insert freely
+drop policy if exists "Service role can insert media" on public.property_media;
+create policy "Service role can insert media"
+  on public.property_media for insert
+  with check (true);
+
+-- 2. Verify properties exist (this will show count — should be 54)
+-- select count(*) from public.properties;
+
+-- 3. Insert all media — safe to re-run (on conflict do nothing)
+insert into public.property_media (property_id, url, display_order) values
+-- Apartments for sale
+('a0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848690/lumo/properties/apt_ext_01.jpg',0),
+('a0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848694/lumo/properties/apt_int_01.jpg',1),
+('a0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848694/lumo/properties/apt_int_02.jpg',2),
+('a0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848691/lumo/properties/apt_ext_02.jpg',0),
+('a0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848694/lumo/properties/apt_int_03.jpg',1),
+('a0000000-0000-0000-0000-000000000003','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_03.jpg',0),
+('a0000000-0000-0000-0000-000000000003','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848694/lumo/properties/apt_int_04.jpg',1),
+('a0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848691/lumo/properties/apt_ext_04.jpg',0),
+('a0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848694/lumo/properties/apt_int_05.jpg',1),
+('a0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848695/lumo/properties/apt_int_06.jpg',2),
+('a0000000-0000-0000-0000-000000000005','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848691/lumo/properties/apt_ext_05.jpg',0),
+('a0000000-0000-0000-0000-000000000005','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848695/lumo/properties/apt_int_07.jpg',1),
+('a0000000-0000-0000-0000-000000000006','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_06.jpg',0),
+('a0000000-0000-0000-0000-000000000006','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848695/lumo/properties/apt_int_08.jpg',1),
+('a0000000-0000-0000-0000-000000000007','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_07.jpg',0),
+('a0000000-0000-0000-0000-000000000007','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848695/lumo/properties/apt_int_09.jpg',1),
+('a0000000-0000-0000-0000-000000000007','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848695/lumo/properties/apt_int_10.jpg',2),
+('a0000000-0000-0000-0000-000000000008','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_08.jpg',0),
+('a0000000-0000-0000-0000-000000000008','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_01.jpg',1),
+('a0000000-0000-0000-0000-000000000009','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_09.jpg',0),
+('a0000000-0000-0000-0000-000000000009','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_02.jpg',1),
+('a0000000-0000-0000-0000-000000000010','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_10.jpg',0),
+('a0000000-0000-0000-0000-000000000010','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_03.jpg',1),
+('a0000000-0000-0000-0000-000000000011','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848690/lumo/properties/apt_ext_01.jpg',0),
+('a0000000-0000-0000-0000-000000000011','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_04.jpg',1),
+('a0000000-0000-0000-0000-000000000011','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_05.jpg',2),
+('a0000000-0000-0000-0000-000000000012','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848691/lumo/properties/apt_ext_02.jpg',0),
+('a0000000-0000-0000-0000-000000000012','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848694/lumo/properties/apt_int_01.jpg',1),
+-- Apartments for rent
+('a0000000-0000-0000-0000-000000000013','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_03.jpg',0),
+('a0000000-0000-0000-0000-000000000013','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848694/lumo/properties/apt_int_02.jpg',1),
+('a0000000-0000-0000-0000-000000000014','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848691/lumo/properties/apt_ext_04.jpg',0),
+('a0000000-0000-0000-0000-000000000014','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848694/lumo/properties/apt_int_03.jpg',1),
+('a0000000-0000-0000-0000-000000000015','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848691/lumo/properties/apt_ext_05.jpg',0),
+('a0000000-0000-0000-0000-000000000015','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848694/lumo/properties/apt_int_04.jpg',1),
+('a0000000-0000-0000-0000-000000000016','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_06.jpg',0),
+('a0000000-0000-0000-0000-000000000016','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848694/lumo/properties/apt_int_05.jpg',1),
+('a0000000-0000-0000-0000-000000000017','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_07.jpg',0),
+('a0000000-0000-0000-0000-000000000017','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848695/lumo/properties/apt_int_06.jpg',1),
+('a0000000-0000-0000-0000-000000000017','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848695/lumo/properties/apt_int_07.jpg',2),
+('a0000000-0000-0000-0000-000000000018','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_08.jpg',0),
+('a0000000-0000-0000-0000-000000000018','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848695/lumo/properties/apt_int_08.jpg',1),
+('a0000000-0000-0000-0000-000000000019','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_09.jpg',0),
+('a0000000-0000-0000-0000-000000000019','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848695/lumo/properties/apt_int_09.jpg',1),
+('a0000000-0000-0000-0000-000000000020','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_10.jpg',0),
+('a0000000-0000-0000-0000-000000000020','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848695/lumo/properties/apt_int_10.jpg',1),
+-- Villas
+('b0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_01.jpg',0),
+('b0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_01.jpg',1),
+('b0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_02.jpg',2),
+('b0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_02.jpg',0),
+('b0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_03.jpg',1),
+('b0000000-0000-0000-0000-000000000003','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_03.jpg',0),
+('b0000000-0000-0000-0000-000000000003','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_04.jpg',1),
+('b0000000-0000-0000-0000-000000000003','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_05.jpg',2),
+('b0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_04.jpg',0),
+('b0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_01.jpg',1),
+('b0000000-0000-0000-0000-000000000005','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_05.jpg',0),
+('b0000000-0000-0000-0000-000000000005','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_02.jpg',1),
+('b0000000-0000-0000-0000-000000000005','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_03.jpg',2),
+('b0000000-0000-0000-0000-000000000006','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848697/lumo/properties/villa_06.jpg',0),
+('b0000000-0000-0000-0000-000000000006','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_04.jpg',1),
+('b0000000-0000-0000-0000-000000000007','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848697/lumo/properties/villa_07.jpg',0),
+('b0000000-0000-0000-0000-000000000007','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_05.jpg',1),
+('b0000000-0000-0000-0000-000000000008','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848697/lumo/properties/villa_08.jpg',0),
+('b0000000-0000-0000-0000-000000000008','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_01.jpg',1),
+('b0000000-0000-0000-0000-000000000008','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_02.jpg',2),
+('b0000000-0000-0000-0000-000000000009','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848697/lumo/properties/villa_10.jpg',0),
+('b0000000-0000-0000-0000-000000000009','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_03.jpg',1),
+('b0000000-0000-0000-0000-000000000010','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_01.jpg',0),
+('b0000000-0000-0000-0000-000000000010','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_04.jpg',1),
+('b0000000-0000-0000-0000-000000000011','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_02.jpg',0),
+('b0000000-0000-0000-0000-000000000011','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_05.jpg',1),
+-- Houses
+('c0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_03.jpg',0),
+('c0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_01.jpg',1),
+('c0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_04.jpg',0),
+('c0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_02.jpg',1),
+('c0000000-0000-0000-0000-000000000003','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_05.jpg',0),
+('c0000000-0000-0000-0000-000000000003','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_03.jpg',1),
+('c0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848697/lumo/properties/villa_06.jpg',0),
+('c0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_04.jpg',1),
+('c0000000-0000-0000-0000-000000000005','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848697/lumo/properties/villa_07.jpg',0),
+('c0000000-0000-0000-0000-000000000005','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_05.jpg',1),
+('c0000000-0000-0000-0000-000000000006','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848697/lumo/properties/villa_08.jpg',0),
+('c0000000-0000-0000-0000-000000000006','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_01.jpg',1),
+('c0000000-0000-0000-0000-000000000007','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_01.jpg',0),
+('c0000000-0000-0000-0000-000000000007','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_02.jpg',1),
+('c0000000-0000-0000-0000-000000000008','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848696/lumo/properties/villa_02.jpg',0),
+('c0000000-0000-0000-0000-000000000008','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_03.jpg',1),
+-- Land
+('d0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_01.jpg',0),
+('d0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_02.jpg',0),
+('d0000000-0000-0000-0000-000000000003','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_03.jpg',0),
+('d0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_04.jpg',0),
+('d0000000-0000-0000-0000-000000000005','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_05.jpg',0),
+-- Commercial
+('e0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848690/lumo/properties/apt_ext_01.jpg',0),
+('e0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_01.jpg',1),
+('e0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848691/lumo/properties/apt_ext_02.jpg',0),
+('e0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_02.jpg',1),
+('e0000000-0000-0000-0000-000000000003','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848691/lumo/properties/apt_ext_03.jpg',0),
+('e0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848691/lumo/properties/apt_ext_04.jpg',0),
+('e0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_03.jpg',1),
+-- Offices
+('f0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848691/lumo/properties/apt_ext_05.jpg',0),
+('f0000000-0000-0000-0000-000000000001','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_04.jpg',1),
+('f0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_06.jpg',0),
+('f0000000-0000-0000-0000-000000000002','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848703/lumo/properties/interior_05.jpg',1),
+('f0000000-0000-0000-0000-000000000003','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_07.jpg',0),
+('f0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_08.jpg',0),
+('f0000000-0000-0000-0000-000000000004','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_01.jpg',1),
+('f0000000-0000-0000-0000-000000000005','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_09.jpg',0),
+('f0000000-0000-0000-0000-000000000006','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848692/lumo/properties/apt_ext_10.jpg',0),
+('f0000000-0000-0000-0000-000000000006','https://res.cloudinary.com/vf4zqyla/image/upload/v1793848704/lumo/properties/interior_02.jpg',1);
+
+-- 4. Verify — should return 107 rows
+-- select count(*) from public.property_media;

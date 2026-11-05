@@ -8,7 +8,7 @@ import '../tokens/lumo_spacing.dart';
 
 /// Lumo Design System — Theme
 /// Wires all design tokens into Flutter's ThemeData.
-/// Every widget consumes theme values — never hardcoded values.
+/// Warm palette — Ethiopian golden light meets premium minimalism.
 abstract final class LumoTheme {
   static ThemeData get light => _buildTheme(brightness: Brightness.light);
   static ThemeData get dark => _buildTheme(brightness: Brightness.dark);
@@ -16,15 +16,16 @@ abstract final class LumoTheme {
   static ThemeData _buildTheme({required Brightness brightness}) {
     final isDark = brightness == Brightness.dark;
 
-    final background = isDark ? LumoColors.darkBackground : LumoColors.lightBackground;
-    final surface = isDark ? LumoColors.darkSurface : LumoColors.lightSurface;
-    final primary = isDark ? LumoColors.darkPrimary : LumoColors.lightPrimary;
-    final secondary = isDark ? LumoColors.darkSecondary : LumoColors.lightSecondary;
-    final textPrimary = isDark ? LumoColors.darkTextPrimary : LumoColors.lightTextPrimary;
-    final textSecondary = isDark ? LumoColors.darkTextSecondary : LumoColors.lightTextSecondary;
-    final divider = isDark ? LumoColors.darkDivider : LumoColors.lightDivider;
-    final error = isDark ? LumoColors.darkError : LumoColors.lightError;
+    final background       = isDark ? LumoColors.darkBackground       : LumoColors.lightBackground;
+    final surface          = isDark ? LumoColors.darkSurface          : LumoColors.lightSurface;
+    final primary          = isDark ? LumoColors.darkPrimary          : LumoColors.lightPrimary;
+    final secondary        = isDark ? LumoColors.darkSecondary        : LumoColors.lightSecondary;
+    final textPrimary      = isDark ? LumoColors.darkTextPrimary      : LumoColors.lightTextPrimary;
+    final textSecondary    = isDark ? LumoColors.darkTextSecondary    : LumoColors.lightTextSecondary;
+    final divider          = isDark ? LumoColors.darkDivider          : LumoColors.lightDivider;
+    final error            = isDark ? LumoColors.darkError            : LumoColors.lightError;
     final surfaceSecondary = isDark ? LumoColors.darkSurfaceSecondary : LumoColors.lightSurfaceSecondary;
+    final primaryContainer = isDark ? LumoColors.darkPrimaryContainer : LumoColors.lightPrimaryContainer;
 
     return ThemeData(
       useMaterial3: true,
@@ -36,7 +37,7 @@ abstract final class LumoTheme {
         brightness: brightness,
         primary: primary,
         onPrimary: isDark ? LumoColors.darkBackground : LumoColors.lightBackground,
-        primaryContainer: isDark ? LumoColors.darkPrimaryContainer : LumoColors.lightPrimaryContainer,
+        primaryContainer: primaryContainer,
         onPrimaryContainer: textPrimary,
         secondary: secondary,
         onSecondary: surface,
@@ -48,22 +49,27 @@ abstract final class LumoTheme {
         onError: LumoColors.white,
         outline: divider,
         outlineVariant: divider,
+        // Tertiary slot carries the gold accent throughout the app
+        tertiary: isDark ? LumoColors.darkGold : LumoColors.lightGold,
+        onTertiary: isDark ? LumoColors.darkBackground : LumoColors.lightBackground,
+        tertiaryContainer: isDark ? LumoColors.darkGoldContainer : LumoColors.lightGoldContainer,
+        onTertiaryContainer: isDark ? LumoColors.darkGold : LumoColors.lightGold,
       ),
 
       textTheme: TextTheme(
-        displayLarge: LumoTypography.displayLarge.copyWith(color: textPrimary),
-        displayMedium: LumoTypography.displayMedium.copyWith(color: textPrimary),
-        headlineLarge: LumoTypography.headlineLarge.copyWith(color: textPrimary),
+        displayLarge:   LumoTypography.displayLarge.copyWith(color: textPrimary),
+        displayMedium:  LumoTypography.displayMedium.copyWith(color: textPrimary),
+        headlineLarge:  LumoTypography.headlineLarge.copyWith(color: textPrimary),
         headlineMedium: LumoTypography.headlineMedium.copyWith(color: textPrimary),
-        headlineSmall: LumoTypography.headlineSmall.copyWith(color: textPrimary),
-        titleLarge: LumoTypography.titleLarge.copyWith(color: textPrimary),
-        titleMedium: LumoTypography.titleMedium.copyWith(color: textPrimary),
-        bodyLarge: LumoTypography.bodyLarge.copyWith(color: textPrimary),
-        bodyMedium: LumoTypography.bodyMedium.copyWith(color: textSecondary),
-        bodySmall: LumoTypography.bodySmall.copyWith(color: textSecondary),
-        labelLarge: LumoTypography.labelLarge.copyWith(color: textPrimary),
-        labelMedium: LumoTypography.labelMedium.copyWith(color: textSecondary),
-        labelSmall: LumoTypography.labelSmall.copyWith(color: textSecondary),
+        headlineSmall:  LumoTypography.headlineSmall.copyWith(color: textPrimary),
+        titleLarge:     LumoTypography.titleLarge.copyWith(color: textPrimary),
+        titleMedium:    LumoTypography.titleMedium.copyWith(color: textPrimary),
+        bodyLarge:      LumoTypography.bodyLarge.copyWith(color: textPrimary),
+        bodyMedium:     LumoTypography.bodyMedium.copyWith(color: textSecondary),
+        bodySmall:      LumoTypography.bodySmall.copyWith(color: textSecondary),
+        labelLarge:     LumoTypography.labelLarge.copyWith(color: textPrimary),
+        labelMedium:    LumoTypography.labelMedium.copyWith(color: textSecondary),
+        labelSmall:     LumoTypography.labelSmall.copyWith(color: textSecondary),
       ),
 
       appBarTheme: AppBarTheme(

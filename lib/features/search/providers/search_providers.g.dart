@@ -6,7 +6,7 @@ part of 'search_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$trendingSearchesHash() => r'1a23114c9a1c089edfb31e04e91f6885967a5433';
+String _$trendingSearchesHash() => r'036b474fff63723c03fda66437d11527f163e0cf';
 
 /// See also [trendingSearches].
 @ProviderFor(trendingSearches)
@@ -23,7 +23,7 @@ final trendingSearchesProvider = AutoDisposeProvider<List<String>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef TrendingSearchesRef = AutoDisposeProviderRef<List<String>>;
-String _$searchResultsHash() => r'9e4174b1f53967608f2a11463b975b1dcaccf8e2';
+String _$searchResultsHash() => r'c36f06b1e61774647aa15b9b5ee3ad3cab559519';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -51,20 +51,23 @@ class _SystemHash {
 const searchResultsProvider = SearchResultsFamily();
 
 /// See also [searchResults].
-class SearchResultsFamily extends Family<AsyncValue<List<SearchResultEntity>>> {
+class SearchResultsFamily extends Family<AsyncValue<List<PropertyEntity>>> {
   /// See also [searchResults].
   const SearchResultsFamily();
 
   /// See also [searchResults].
-  SearchResultsProvider call({required String query}) {
-    return SearchResultsProvider(query: query);
+  SearchResultsProvider call({
+    required String query,
+    required SearchFilters filters,
+  }) {
+    return SearchResultsProvider(query: query, filters: filters);
   }
 
   @override
   SearchResultsProvider getProviderOverride(
     covariant SearchResultsProvider provider,
   ) {
-    return call(query: provider.query);
+    return call(query: provider.query, filters: provider.filters);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -84,11 +87,15 @@ class SearchResultsFamily extends Family<AsyncValue<List<SearchResultEntity>>> {
 
 /// See also [searchResults].
 class SearchResultsProvider
-    extends AutoDisposeFutureProvider<List<SearchResultEntity>> {
+    extends AutoDisposeFutureProvider<List<PropertyEntity>> {
   /// See also [searchResults].
-  SearchResultsProvider({required String query})
+  SearchResultsProvider({required String query, required SearchFilters filters})
     : this._internal(
-        (ref) => searchResults(ref as SearchResultsRef, query: query),
+        (ref) => searchResults(
+          ref as SearchResultsRef,
+          query: query,
+          filters: filters,
+        ),
         from: searchResultsProvider,
         name: r'searchResultsProvider',
         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -98,6 +105,7 @@ class SearchResultsProvider
         allTransitiveDependencies:
             SearchResultsFamily._allTransitiveDependencies,
         query: query,
+        filters: filters,
       );
 
   SearchResultsProvider._internal(
@@ -108,14 +116,15 @@ class SearchResultsProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.query,
+    required this.filters,
   }) : super.internal();
 
   final String query;
+  final SearchFilters filters;
 
   @override
   Override overrideWith(
-    FutureOr<List<SearchResultEntity>> Function(SearchResultsRef provider)
-    create,
+    FutureOr<List<PropertyEntity>> Function(SearchResultsRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -127,24 +136,28 @@ class SearchResultsProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         query: query,
+        filters: filters,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<SearchResultEntity>> createElement() {
+  AutoDisposeFutureProviderElement<List<PropertyEntity>> createElement() {
     return _SearchResultsProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is SearchResultsProvider && other.query == query;
+    return other is SearchResultsProvider &&
+        other.query == query &&
+        other.filters == filters;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, query.hashCode);
+    hash = _SystemHash.combine(hash, filters.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -152,22 +165,26 @@ class SearchResultsProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin SearchResultsRef
-    on AutoDisposeFutureProviderRef<List<SearchResultEntity>> {
+mixin SearchResultsRef on AutoDisposeFutureProviderRef<List<PropertyEntity>> {
   /// The parameter `query` of this provider.
   String get query;
+
+  /// The parameter `filters` of this provider.
+  SearchFilters get filters;
 }
 
 class _SearchResultsProviderElement
-    extends AutoDisposeFutureProviderElement<List<SearchResultEntity>>
+    extends AutoDisposeFutureProviderElement<List<PropertyEntity>>
     with SearchResultsRef {
   _SearchResultsProviderElement(super.provider);
 
   @override
   String get query => (origin as SearchResultsProvider).query;
+  @override
+  SearchFilters get filters => (origin as SearchResultsProvider).filters;
 }
 
-String _$searchHistoryHash() => r'30e7ad181de3bdc803cff5ddc4048edda89ebab8';
+String _$searchHistoryHash() => r'4aeff22299969cad0dee88ee24fef31ef135be8c';
 
 /// See also [SearchHistory].
 @ProviderFor(SearchHistory)
@@ -199,5 +216,22 @@ final searchQueryProvider =
     );
 
 typedef _$SearchQuery = AutoDisposeNotifier<String>;
+String _$searchFilterNotifierHash() =>
+    r'bd3da16cafa236397341fa2527a04faca5d42483';
+
+/// See also [SearchFilterNotifier].
+@ProviderFor(SearchFilterNotifier)
+final searchFilterNotifierProvider =
+    AutoDisposeNotifierProvider<SearchFilterNotifier, SearchFilters>.internal(
+      SearchFilterNotifier.new,
+      name: r'searchFilterNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$searchFilterNotifierHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+typedef _$SearchFilterNotifier = AutoDisposeNotifier<SearchFilters>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

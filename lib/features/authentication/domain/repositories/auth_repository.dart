@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/auth_user_entity.dart';
 
@@ -30,4 +31,7 @@ abstract interface class AuthRepository {
   Future<Either<LumoFailure, void>> signOut();
 
   Future<Either<LumoFailure, void>> sendPasswordReset({required String email});
+
+  /// Fetches the full user including their role from the profiles table.
+  Future<AuthUserEntity?> fetchUserWithRole(User? supabaseUser);
 }

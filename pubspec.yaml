@@ -1,5 +1,5 @@
 name: lumo
-description: Lumo — The future of shopping.
+description: Lumo — Your home, back home.
 version: 1.0.0+1
 publish_to: none
 
@@ -40,15 +40,21 @@ dependencies:
   # Fonts
   google_fonts: ^6.2.1
 
+  # Localization
+  intl: ^0.20.2
+
   # Utils
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
   equatable: ^2.0.7
   dartz: ^0.10.1
-  intl: ^0.20.2
   uuid: ^4.5.1
   logger: ^2.5.0
   path_provider: ^2.1.5
+
+  # Map
+  flutter_map: ^8.1.1
+  latlong2: ^0.9.1
 
   # Image
   flutter_svg: ^2.0.17
@@ -69,6 +75,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
     - assets/images/

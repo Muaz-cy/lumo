@@ -1,22 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../data/models/wishlist_item_hive_model.dart';
 import '../data/repositories/wishlist_repository_impl.dart';
 import '../domain/entities/wishlist_item_entity.dart';
 import '../domain/repositories/wishlist_repository.dart';
 
 part 'wishlist_providers.g.dart';
 
-const _wishlistBoxName = 'lumo_wishlist';
-
 @riverpod
-Box<WishlistItemHiveModel> wishlistBox(Ref ref) =>
-    Hive.box<WishlistItemHiveModel>(_wishlistBoxName);
-
-@riverpod
-WishlistRepository wishlistRepository(Ref ref) =>
-    WishlistRepositoryImpl(ref.watch(wishlistBoxProvider));
+WishlistRepository wishlistRepository(Ref ref) => WishlistRepositoryImpl();
 
 /// Single source of truth for the wishlist.
 @riverpod

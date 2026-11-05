@@ -1,40 +1,40 @@
-import '../../../product/domain/entities/product_entity.dart';
-import 'collection_entity.dart';
+import '../../../property/domain/entities/property_entity.dart';
 
-/// Lumo — Home Sections
-/// Each section of the home screen is a typed value.
-/// The UI renders based on type — never on string keys.
 sealed class HomeSection {
   const HomeSection();
 }
 
-final class HeroSection extends HomeSection {
-  const HeroSection({required this.product});
-  final ProductEntity product;
+final class FeaturedSection extends HomeSection {
+  const FeaturedSection({required this.properties});
+  final List<PropertyEntity> properties;
 }
 
-final class CollectionsSection extends HomeSection {
-  const CollectionsSection({required this.collections});
-  final List<CollectionEntity> collections;
+final class NeighborhoodSection extends HomeSection {
+  const NeighborhoodSection({required this.neighborhoods});
+  final List<NeighborhoodItem> neighborhoods;
 }
 
-final class TrendingSection extends HomeSection {
-  const TrendingSection({required this.products});
-  final List<ProductEntity> products;
+final class ForSaleSection extends HomeSection {
+  const ForSaleSection({required this.properties});
+  final List<PropertyEntity> properties;
 }
 
-final class RecommendedSection extends HomeSection {
-  const RecommendedSection({required this.products});
-  final List<ProductEntity> products;
+final class ForRentSection extends HomeSection {
+  const ForRentSection({required this.properties});
+  final List<PropertyEntity> properties;
 }
 
-final class EditorialBreakSection extends HomeSection {
-  const EditorialBreakSection({
-    required this.headline,
-    required this.subheadline,
-    required this.imageUrl,
+class NeighborhoodItem {
+  const NeighborhoodItem({
+    required this.name,
+    required this.nameAm,
+    required this.city,
+    required this.listingCount,
+    this.imageUrl,
   });
-  final String headline;
-  final String subheadline;
-  final String imageUrl;
+  final String name;
+  final String nameAm;
+  final String city;
+  final int listingCount;
+  final String? imageUrl;
 }

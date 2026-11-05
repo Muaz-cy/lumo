@@ -1,0 +1,230 @@
+{
+  "@@locale": "en",
+
+  "appName": "Lumo",
+
+  "splashTagline": "Your home, back home.",
+
+  "onboardingHeadline1": "Discover\ndifferently.",
+  "onboardingSubheadline1": "Curated Ethiopian real estate,\npersonalized for the diaspora.",
+  "onboardingHeadline2": "Invest with\nconfidence.",
+  "onboardingSubheadline2": "Transparent pricing.\nVerified listings. No surprises.",
+  "onboardingHeadline3": "Your trusted\nadvisor.",
+  "onboardingSubheadline3": "We don't just list properties.\nWe guide your decision.",
+  "onboardingContinue": "Continue",
+  "onboardingGetStarted": "Get started",
+  "onboardingSkip": "Skip",
+
+  "authSignIn": "Sign in",
+  "authSignUp": "Create account",
+  "authEmail": "Email address",
+  "authPassword": "Password",
+  "authFullName": "Full name",
+  "authForgotPassword": "Forgot password?",
+  "authNoAccount": "Don't have an account?",
+  "authHaveAccount": "Already have an account?",
+  "authContinueAsGuest": "Browse without account",
+  "authOrContinueWith": "or continue with",
+  "authSignInWithGoogle": "Continue with Google",
+  "authSignInWithApple": "Continue with Apple",
+
+  "homeGreetingMorning": "Good morning",
+  "homeGreetingAfternoon": "Good afternoon",
+  "homeGreetingEvening": "Good evening",
+  "homeDiscover": "Discover today.",
+  "homeFeatured": "Featured",
+  "homeTrending": "Trending now",
+  "homeNewListings": "New listings",
+  "homeForYou": "For you",
+  "homeSeeAll": "See all",
+  "homeNeighborhoods": "Explore neighborhoods",
+  "homeInvestmentPicks": "Investment picks",
+
+  "searchPlaceholder": "Search properties, neighborhoods...",
+  "searchRecent": "Recent searches",
+  "searchTrending": "Trending",
+  "searchNoResults": "No properties found",
+  "searchNoResultsHint": "Try a different neighborhood or price range.",
+
+  "propertyBedrooms": "{count} bed",
+  "@propertyBedrooms": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "propertyBathrooms": "{count} bath",
+  "@propertyBathrooms": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "propertyArea": "{area} m²",
+  "@propertyArea": {
+    "placeholders": {
+      "area": { "type": "double" }
+    }
+  },
+  "propertyVerified": "Verified",
+  "propertyFeatured": "Featured",
+  "propertyNewListing": "New",
+  "propertyForSale": "For Sale",
+  "propertyForRent": "For Rent",
+  "propertyTitleDeedConfirmed": "Title deed confirmed",
+  "propertyTeamVerified": "Lumo verified",
+  "propertyAbout": "About this property",
+  "propertyFeatures": "Features",
+  "propertyLocation": "Location",
+  "propertyNeighborhood": "Neighborhood",
+  "propertyInvestmentInsight": "Investment insight",
+  "propertyPriceHistory": "Price history",
+  "propertyNearby": "Nearby properties",
+  "propertyContact": "Express interest",
+  "propertySave": "Save",
+  "propertySaved": "Saved",
+  "propertyShare": "Share",
+  "propertyFloor": "Floor {number}",
+  "@propertyFloor": {
+    "placeholders": {
+      "number": { "type": "int" }
+    }
+  },
+  "propertyYearBuilt": "Built {year}",
+  "@propertyYearBuilt": {
+    "placeholders": {
+      "year": { "type": "int" }
+    }
+  },
+
+  "priceETB": "ETB {amount}",
+  "@priceETB": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "priceUSD": "≈ USD {amount}",
+  "@priceUSD": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "pricePerSqm": "ETB {amount}/m²",
+  "@pricePerSqm": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "exchangeRateUpdated": "Rate updated {time}",
+  "@exchangeRateUpdated": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+
+  "savedTitle": "Saved",
+  "savedEmpty": "Nothing saved yet",
+  "savedEmptyHint": "Properties you save will appear here.",
+  "savedStartExploring": "Start exploring",
+
+  "inquiryTitle": "Express Interest",
+  "inquirySubtitle": "Our team will reach out within 24 hours.",
+  "inquiryName": "Your name",
+  "inquiryPhone": "Phone number",
+  "inquiryMessage": "Message (optional)",
+  "inquiryMessageHint": "Tell us about your timeline, budget, or any questions.",
+  "inquirySubmit": "Send inquiry",
+  "inquirySuccess": "Inquiry sent",
+  "inquirySuccessMessage": "Our team will contact you within 24 hours.",
+  "inquiryMyInquiries": "My inquiries",
+
+  "neighborhoodAbout": "About {name}",
+  "@neighborhoodAbout": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "neighborhoodGrowth": "{percent}% growth",
+  "@neighborhoodGrowth": {
+    "placeholders": {
+      "percent": { "type": "String" }
+    }
+  },
+  "neighborhoodAvgPrice": "Avg. ETB {price}/m²",
+  "@neighborhoodAvgPrice": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+
+  "brokerSubmitListing": "Submit a listing",
+  "brokerMyListings": "My listings",
+  "brokerStatusPending": "Under review",
+  "brokerStatusApproved": "Live",
+  "brokerStatusRejected": "Not approved",
+  "brokerReviewNote": "Our team reviews listings within 3 business days. We may visit the property in person.",
+
+  "profileTitle": "Profile",
+  "profileAccount": "Account",
+  "profileSaved": "Saved properties",
+  "profileInquiries": "My inquiries",
+  "profileSettings": "Settings",
+  "profileSignOut": "Sign out",
+  "profileBrokerPortal": "Broker portal",
+
+  "settingsTitle": "Settings",
+  "settingsLanguage": "Language",
+  "settingsTheme": "Appearance",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+  "settingsThemeSystem": "System",
+  "settingsCurrency": "Currency display",
+  "settingsNotifications": "Notifications",
+  "settingsPrivacy": "Privacy policy",
+  "settingsTerms": "Terms of service",
+  "settingsAbout": "About Lumo",
+  "settingsVersion": "Version {version}",
+  "@settingsVersion": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+
+  "notificationsTitle": "Notifications",
+  "notificationsEmpty": "You're all caught up",
+  "notificationsEmptyHint": "We'll notify you about your saved properties and inquiries.",
+
+  "errorGeneric": "Something went wrong.",
+  "errorNetwork": "Check your connection and try again.",
+  "errorRetry": "Try again",
+  "errorGoBack": "Go back",
+  "errorNotFound": "Not found",
+  "errorNotFoundHint": "This property may no longer be available.",
+
+  "filterTitle": "Filter",
+  "filterPropertyType": "Property type",
+  "filterPriceRange": "Price range",
+  "filterBedrooms": "Bedrooms",
+  "filterBathrooms": "Bathrooms",
+  "filterAreaRange": "Area (m²)",
+  "filterNeighborhood": "Neighborhood",
+  "filterApply": "Apply filters",
+  "filterReset": "Reset",
+  "filterResults": "{count} properties",
+  "@filterResults": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "typeApartment": "Apartment",
+  "typeVilla": "Villa",
+  "typeCommercial": "Commercial",
+  "typeLand": "Land",
+  "typeOffice": "Office",
+  "typeWarehouse": "Warehouse",
+
+  "navHome": "Home",
+  "navSearch": "Search",
+  "navSaved": "Saved",
+  "navInquiries": "Inquiries",
+  "navProfile": "Profile"
+}

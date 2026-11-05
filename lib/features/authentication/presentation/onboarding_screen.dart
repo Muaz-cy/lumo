@@ -21,19 +21,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   static const _pages = [
     _OnboardingPage(
-      headline: 'Discover\ndifferently.',
-      subheadline: 'A curated world of products,\npersonalized for you.',
-      accentIcon: Icons.explore_outlined,
+      headline: 'Your home,\nback home.',
+      subheadline: 'Premium Ethiopian real estate,\ncurated for the diaspora.',
+      accentIcon: Icons.home_work_outlined,
     ),
     _OnboardingPage(
-      headline: 'Shop with\nconfidence.',
-      subheadline: 'Transparent pricing.\nHonest reviews. No surprises.',
+      headline: 'Invest with\nconfidence.',
+      subheadline: 'Every listing verified by our team.\nNo surprises, no middlemen.',
       accentIcon: Icons.verified_outlined,
     ),
     _OnboardingPage(
-      headline: 'Technology\nthat disappears.',
-      subheadline: 'So effortless, you only\nnotice the experience.',
-      accentIcon: Icons.auto_awesome_outlined,
+      headline: 'From anywhere\nin the world.',
+      subheadline: 'Browse, inquire, and invest\nfrom the US, Europe, or the Gulf.',
+      accentIcon: Icons.language_outlined,
     ),
   ];
 
@@ -60,6 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final isLast = _currentPage == _pages.length - 1;
 
     return Scaffold(
+      backgroundColor: LumoColors.lightBackground,
       body: SafeArea(
         child: Column(
           children: [
@@ -120,7 +121,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         height: 6,
                         decoration: BoxDecoration(
                           color: _currentPage == i
-                              ? colors.onSurface
+                              ? LumoColors.lightGold
                               : colors.onSurface.withValues(alpha: 0.2),
                           borderRadius: LumoRadius.borderPill,
                         ),
@@ -131,9 +132,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const SizedBox(height: LumoSpacing.space32),
 
                   // CTA button
-                  ElevatedButton(
-                    onPressed: _next,
-                    child: Text(isLast ? 'Get started' : 'Continue'),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _next,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: LumoColors.lightGold,
+                        foregroundColor: LumoColors.white,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: LumoSpacing.space16,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: LumoRadius.borderLarge,
+                        ),
+                      ),
+                      child: Text(isLast ? 'Get started' : 'Continue'),
+                    ),
                   ),
                 ],
               ),
@@ -171,12 +185,12 @@ class _OnboardingPage extends StatelessWidget {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              color: colors.secondaryContainer,
+              color: LumoColors.lightGoldContainer,
               borderRadius: LumoRadius.borderLarge,
             ),
             child: Icon(
               accentIcon,
-              color: colors.onSurface,
+              color: LumoColors.lightGold,
               size: 28,
             ),
           )

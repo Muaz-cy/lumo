@@ -9,7 +9,7 @@ const _themeKey = 'lumo_theme_mode';
 @riverpod
 class ThemeNotifier extends _$ThemeNotifier {
   @override
-  ThemeMode build() => ThemeMode.system;
+  ThemeMode build() => ThemeMode.light;
 
   Future<void> initialize() async {
     final prefs = await SharedPreferences.getInstance();
@@ -17,7 +17,7 @@ class ThemeNotifier extends _$ThemeNotifier {
     state = switch (saved) {
       'light' => ThemeMode.light,
       'dark' => ThemeMode.dark,
-      _ => ThemeMode.system,
+      _ => ThemeMode.light,
     };
   }
 

@@ -325,9 +325,9 @@ class _TypeIcon extends StatelessWidget {
   final ColorScheme colors;
 
   IconData get _icon => switch (type) {
-        NotificationType.order => Icons.inventory_2_outlined,
-        NotificationType.promo => Icons.local_offer_outlined,
-        NotificationType.newArrival => Icons.new_releases_outlined,
+        NotificationType.order => Icons.home_outlined,
+        NotificationType.promo => Icons.calendar_today_outlined,
+        NotificationType.newArrival => Icons.fiber_new_outlined,
         NotificationType.system => Icons.info_outline_rounded,
       };
 

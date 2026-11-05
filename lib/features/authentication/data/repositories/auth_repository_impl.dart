@@ -68,10 +68,16 @@ final class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<LumoFailure, AuthUserEntity>> signInWithGoogle() async {
     try {
-      await _client.auth.signInWithOAuth(OAuthProvider.google);
-      final user = _mapUser(_client.auth.currentUser);
-      if (user == null) return const Left(AuthenticationFailure());
-      return Right(user);
+      // signInWithOAuth opens a browser and returns immediately on mobile.
+      // The actual sign-in result arrives via the authStateChanges stream
+      // once the deep-link redirect brings the user back to the app.
+      // Navigation is handled by the authStateChanges listener in the UI.
+      await _client.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: _oauthRedirectUrl,
+      );
+      // Return a placeholder — the real user arrives via the stream.
+      return const Left(AuthenticationFailure(message: 'oauth_pending'));
     } on AuthException catch (e) {
       LumoLogger.error('Google sign in failed', e);
       return Left(AuthenticationFailure(message: e.message));
@@ -84,10 +90,11 @@ final class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<LumoFailure, AuthUserEntity>> signInWithApple() async {
     try {
-      await _client.auth.signInWithOAuth(OAuthProvider.apple);
-      final user = _mapUser(_client.auth.currentUser);
-      if (user == null) return const Left(AuthenticationFailure());
-      return Right(user);
+      await _client.auth.signInWithOAuth(
+        OAuthProvider.apple,
+        redirectTo: _oauthRedirectUrl,
+      );
+      return const Left(AuthenticationFailure(message: 'oauth_pending'));
     } on AuthException catch (e) {
       LumoLogger.error('Apple sign in failed', e);
       return Left(AuthenticationFailure(message: e.message));
@@ -100,6 +107,8 @@ final class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<LumoFailure, AuthUserEntity>> continueAsGuest() async {
     try {
+      // Anonymous sign-in must be enabled in Supabase:
+      // Dashboard → Authentication → Providers → Anonymous → Enable
       final response = await _client.auth.signInAnonymously();
       final user = _mapUser(response.user);
       if (user == null) return const Left(AuthenticationFailure());
@@ -112,6 +121,11 @@ final class AuthRepositoryImpl implements AuthRepository {
       return const Left(UnknownFailure());
     }
   }
+
+  /// Redirect URL registered in Supabase → Authentication → URL Configuration.
+  /// For mobile: use a custom scheme e.g. 'io.lumo.app://login-callback'
+  /// For web: use the site URL e.g. 'https://lumo.app/auth/callback'
+  static const _oauthRedirectUrl = 'io.lumo.app://login-callback';
 
   @override
   Future<Either<LumoFailure, void>> signOut() async {
@@ -152,6 +166,34 @@ final class AuthRepositoryImpl implements AuthRepository {
           user.userMetadata?['full_name'] as String?,
       avatarUrl: user.userMetadata?['avatar_url'] as String?,
       isGuest: user.isAnonymous,
+      // Role is fetched separately via fetchUserWithRole — default to buyer here
+      // so the stream mapping stays synchronous.
     );
+  }
+
+  /// Fetches the user with their role from the profiles table.
+  /// Called after sign-in to get the full user context for routing.
+  @override
+  Future<AuthUserEntity?> fetchUserWithRole(User? user) async {
+    if (user == null) return null;
+    try {
+      final profile = await _client
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .maybeSingle();
+      final role = UserRoleX.fromDb(profile?['role'] as String?);
+      return AuthUserEntity(
+        id: user.id,
+        email: user.email ?? '',
+        displayName: user.userMetadata?['display_name'] as String? ??
+            user.userMetadata?['full_name'] as String?,
+        avatarUrl: user.userMetadata?['avatar_url'] as String?,
+        isGuest: user.isAnonymous,
+        role: role,
+      );
+    } catch (_) {
+      return _mapUser(user);
+    }
   }
 }
